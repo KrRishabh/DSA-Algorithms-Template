@@ -39,4 +39,23 @@ class StacksQueueDeque{
 
         }
     }
+
+    public int[] nextGreaterThanElement(int[] nums){
+
+        int len = nums.length;
+        Stack<Integer> st = new Stack<Integer>();
+        int[] res = new int[len];
+        Array.fill(res, -1);
+
+        for(int i=0; i<len;i++){
+            int curr = nums[i];
+            while(!st.isEmpty() && curr>nums[st.peek()]){
+                res[st.pop()] = curr;
+            }
+            st.push(i);
+        }
+
+        return res;
+    }
+
 }
