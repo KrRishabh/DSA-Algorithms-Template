@@ -6,7 +6,6 @@ class Greedy{
         int currSum = nums[0];
 
         for(int i=0; i<nums.length; i++){
-
             currSum = Math.max(nums[i], currSum+nums[i]);
             maxSum = Math.max(maxSum, currSum);
         }

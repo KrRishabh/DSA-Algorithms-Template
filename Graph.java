@@ -81,6 +81,7 @@ public class Graph{
 
             int nextSize = queue.size();
 
+            // we already know that for the nextSize items they are from the previous level
             for(int i=0; i<nextSize; i++){
 
                 int curr = queue.poll();
