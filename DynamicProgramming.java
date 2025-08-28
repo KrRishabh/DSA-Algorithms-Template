@@ -45,6 +45,18 @@ class DynamicProgramming{
             }
         }
 
+        //backtrack to recover
+
+        List<Integer> take = new ArrayList<>();
+        int w = W;
+        for (int i = n; i >= 1; i--) {
+            if (dp[i][w] != dp[i - 1][w]) { // item i-1 taken
+                take.add(i - 1);
+                w -= wt[i - 1];
+            }
+        }
+        Collections.reverse(take);        
+
         return dp[n][W];
 
 
