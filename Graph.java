@@ -99,5 +99,77 @@ public class Graph{
         
     }
 
-    
+    public static int countConnectedComponents(){
+
+        int count=0;
+        boolean visited[] = new boolean[nodes];
+        for(int i=0; i<nodes; i++){
+            if(!visited[i]){
+                dfs(i, visited);
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    public static boolean bipartiteCheck(){
+
+        Queue<Integer> queue = new LinkedList<Integer>();
+        queue.add(0);
+        int color[] = new int[nodes]; // 0 = uncolored, 1 = red, -1 = blue
+        color[0] = 1; //lets start with red
+        while(!queue.isEmpty()){
+
+            int curr = queue.poll();
+            for(int nei: adjList.get(curr)){
+                if(color[nei] == 0){
+                    color[nei] = -color[curr];
+                    queue.add(nei);
+                }
+                else if(color[nei] == color[curr])
+                    return false;
+            }
+        }
+
+        return true;
+
+    }
+
+
+    public ArrayList<Integer> topologicalSort(){
+        // kahn's algorithm
+
+        ArrayList<Integer> res = new ArrayList<Integer>();
+        int[] indegree = new int[nodes];
+        for(int i=0; i<nodes; i++){
+
+            for(int nei: adjList.get(i)){
+
+                indegree[nei] = indegree[nei]+1;
+            }
+        }
+
+        Queue<Integer> q = new LinkedList<Integer>();
+        for(int i=0; i<nodes; i++){
+            if(indegree[i] == 0)
+                q.offer(i);
+        }
+
+        while(!q.isEmpty()){
+
+            int curr = q.poll();
+            res.add(curr);
+            for(int nei: adjList.get(curr)){
+                indegree[nei] = indegree[nei]-1;
+                if(indegree[nei] == 0) q.offer(nei);
+            }
+        }
+
+        if(res.size() == nodes) return res;
+        
+        // there's cycle present in the graph so topological sort is not possible hence we retun empty arraylist.
+        return new ArrayList<Integer>();
+
+    }
 }
