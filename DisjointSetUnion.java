@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class DSU{
 
     int components;
@@ -86,7 +88,7 @@ public class DSU{
 
     public static KruskalResult getMST(int n, ArrayList<Edge> edges){
 
-        edges.sort((Edge a, Edge b) -> a.w-b.w);
+        edges.sort((Edge a, Edge b) -> Integer.compare(a.w, b.w));
 
         DSU dsu = new DSU(n);
 
@@ -103,6 +105,59 @@ public class DSU{
 
         if(result.edges.size() == n-1) result.isSpanning = true;
         return result;
+    }
+
+    public static int[] dijkstraShortestPath(int n, int src, ArrayList<Edge> edges){
+
+        class Pair{
+            int node;
+            int distance;
+            Pair(int n, int d){
+                this.node = n;
+                this.distance = d;
+            }
+        }
+
+        // construct adjList
+        ArrayList<ArrayList<Edge>> adjList = new ArrayList<ArrayList<Edge>>();
+        for(int i=0; i<n; i++) adjList.add(new ArrayList<Edge>());
+
+        for(Edge e: edges){
+            // assuming undirected graph
+            adjList.get(e.u).add(e);
+            adjList.get(e.v).add(new Edge(e.v, e.u, e.w)); // reverse edge for undirected
+        }
+
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE/2);
+        dist[src] = 0;
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>((Pair a, Pair b) -> Integer.compare(a.distance, b.distance));
+        pq.offer(new Pair(src, 0));
+
+        boolean[] visited = new boolean[n];
+
+        while(!pq.isEmpty()){
+            Pair currPair = pq.poll(); // Fixed: Pair not int
+            int u = currPair.node;
+            int currDist = currPair.distance;
+            
+            if(visited[u]) continue; // Skip if already processed
+            visited[u] = true;
+
+            // Relax all adjacent edges
+            for(Edge e: adjList.get(u)){
+                int v = e.v;
+                int weight = e.w;
+                
+                if(currDist + weight < dist[v]){
+                    dist[v] = currDist + weight;
+                    pq.offer(new Pair(v, dist[v]));
+                }
+            }
+        }
+
+        return dist;
     }
 
 }
