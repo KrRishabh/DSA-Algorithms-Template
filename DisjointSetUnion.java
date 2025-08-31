@@ -14,7 +14,7 @@ public class DSU{
 
         if(parent[x] < 0) return x; // root
         
-        parent[x] = find(x); // path compression
+        parent[x] = find(parent[x]); // path compression
         return parent[x];
     }
 
@@ -26,8 +26,8 @@ public class DSU{
 
         if(parent[ra] > parent[rb]){ // more negative is larger set
             int temp = ra;
-            int ra = rb;
-            int rb = temp;
+            ra = rb;
+            rb = temp;
         }
 
         //merging rb into ra
@@ -48,4 +48,67 @@ public class DSU{
     public int count(){
         return components;
     }
+
+    public static boolean hasCycle(int n, int edges[][]){
+
+        DSU dsu = new DSU(n);
+        for(int i=0; i<edges.length; i++){
+            if(!dsu.union(edges[i][0], edges[i][1])) return true;
+        }
+
+        return false;
+    }
+
+    public static int countConnectedComponents(int n, int edges[][]){
+
+        DSU dsu = new DSU(n);
+        for(int i=0; i<edges.length; i++){
+            dsu.union(edges[i][0], edges[i][1]);
+        }
+
+        return dsu.count();
+    }
+
+    public static class Edge{
+        int u,v,w;
+        Edge(int u, int v, int w){
+            this.u = u;
+            this.v = v;
+            this.w = w;
+        }
+    }
+
+    public static class KruskalResult{
+        long totalWeight;
+        ArrayList<Edge> edges = new ArrayList<Edge>();
+        boolean isSpanning;
+    }
+
+    public static KruskalResult getMST(int n, ArrayList<Edge> edges){
+
+        edges.sort((Edge a, Edge b) -> a.w-b.w);
+
+        DSU dsu = new DSU(n);
+
+        KruskalResult result  = new KruskalResult();
+
+        for(Edge e: edges){
+
+            if(dsu.union(e.u, e.v)){
+                result.edges.add(e);
+                result.totalWeight += e.w;
+                if(result.edges.size() == n-1) break;
+            }
+        }
+
+        if(result.edges.size() == n-1) result.isSpanning = true;
+        return result;
+    }
+
 }
+
+
+
+
+
+
