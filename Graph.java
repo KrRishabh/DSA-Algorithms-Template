@@ -113,7 +113,7 @@ public class Graph{
         return count;
     }
 
-    public static boolean bipartiteCheck(){
+    public boolean bipartiteCheck(){
 
         Queue<Integer> queue = new LinkedList<Integer>();
         queue.add(0);
@@ -172,4 +172,7 @@ public class Graph{
         return new ArrayList<Integer>();
 
     }
+
+
+    
 }
