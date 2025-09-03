@@ -1,3 +1,4 @@
+import java.util.*;
 
 class DynamicProgramming{
 
@@ -60,6 +61,56 @@ class DynamicProgramming{
         return dp[n][W];
 
 
+    }
+
+    int[][] lcs;
+
+
+    // recursion method, top-down appraoch
+    public int longestCommonSubsequence(String text1, String text2){
+
+        int m = text1.length();
+        int n = text2.length();
+
+        lcs = new int[m][n];
+
+        for(int row[]: lcs) Arrays.fill(row, -1);
+
+        return solve(text1, text2, m-1, n-1);
+    }
+
+    public int solve(String s1, String s2, int i, int j){
+
+        if(Math.min(i,j) < 0) return 0;
+
+        if(lcs[i][j]!=-1)  return lcs[i][j];
+
+        if(s1.charAt(i) == s2.charAt(j)){
+            lcs[i][j] = solve(s1, s2, i-1, j-1) + 1;
+            return lcs[i][j];
+        }        
+
+        lcs[i][j] = Math.max( solve(s1,s2, i-1, j) , solve(s1, s2, i, j-1) );
+        return lcs[i][j];
+    }
+    // bottom-up tabulation method
+    public int longestCommonSubsequenceTabulation(String text1, String text2){
+
+        int n = text1.length();
+        int m = text2.length();
+
+        int[][] dp = new int[n+1][m+1];
+
+        for(int i=1; i<=n; i++){
+            for(int j=1; j<=m; j++){
+
+                if(text1.charAt(i-1) == text2.charAt(j-1))  dp[i][j] = 1 + dp[i-1][j-1];
+                else dp[i][j] = Math.max( dp[i-1][j] ,  dp[i][j-1]);
+
+            }
+        }
+
+        return dp[n][m];
     }
 }
 
