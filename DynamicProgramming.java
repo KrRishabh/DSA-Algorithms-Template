@@ -112,6 +112,48 @@ class DynamicProgramming{
 
         return dp[n][m];
     }
+
+
+    public long countWays(int[] nums, int target) {
+        // code for counting number of ways any subset can make K from an array
+         
+         if (target < 0) return 0; 
+
+         long[] ways = new long[target + 1]; 
+         ways[0] = 1L; 
+
+         for (int x : nums) 
+         { 
+               if (x == 0) {
+                // This also works naturally via the loop below, 
+                // // but explicitly noting doesn't hurt understanding. 
+            } 
+            for (int s = target; s >= x; s--) { 
+                ways[s] += ways[s - x]; 
+            } 
+         } 
+         return ways[target]; 
+    }
+
+    public boolean canMakeSum(int[] nums, int target) {
+        // code for checking if it's possible to make a sum K from subsets in an array
+        
+        if (target < 0) return false;
+        
+        boolean[] possible = new boolean[target + 1];
+        possible[0] = true; // empty subset makes sum 0
+        
+        for (int x : nums) 
+        {
+            if (x == 0) {
+                // Zero doesn't change any possibilities, handled naturally by loop below
+            }
+            for (int s = target; s >= x; s--) {
+                possible[s] = possible[s] || possible[s - x];
+            }
+        }
+        return possible[target];
+    }
 }
 
 

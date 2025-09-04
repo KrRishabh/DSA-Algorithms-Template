@@ -160,6 +160,64 @@ public class DSU{
         return dist;
     }
 
+    public class BellmondFordResult{
+        long[] dist;
+        int[] parent;
+        boolean hasNegativeCycle;
+        BellmondFordResult(long[] d, int[] p, boolean neg){
+            dist = d; 
+            parent = p; 
+            hasNegativeCycle = neg;
+        }
+    }
+
+    public static BellmondFordResult bellmondFord(int n, ArrayList<Edge> edges, int src){
+
+        long[] dist = new long[n];
+        int[] parent = new int[n];
+        Arrays.fill(parent, -1);
+        long INF = Long.MAX_VALUE/4;
+        Arrays.fill(dist, INF);
+        dist[src] = 0;
+        boolean hasNegativeCycle = false;
+
+        // Relax edges up to n-1 times
+        for(int i=0; i<n-1; i++){
+            boolean updated = false;
+
+            for(Edge e: edges){
+                if(dist[e.u] == INF) continue;
+
+                long currDist = dist[e.u] + e.w;
+                if(currDist < dist[e.v]){
+                    dist[e.v] = currDist;
+                    parent[e.v] = e.u;
+                    updated = true;
+                }
+            }
+            
+            // Early termination if no updates in this iteration
+            if(!updated) break;
+        }
+
+        // Check for negative cycle
+        for(Edge e: edges){
+            if(dist[e.u] == INF) continue;
+            long currDist = dist[e.u] + e.w;
+            if(currDist < dist[e.v]){
+                hasNegativeCycle = true;
+                break; // Found negative cycle, no need to continue
+            }
+        }
+
+        return new BellmondFordResult(dist, parent, hasNegativeCycle);
+
+    }
+
+
+
+
+
 }
 
 
