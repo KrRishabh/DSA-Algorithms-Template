@@ -214,6 +214,34 @@ public class DSU{
 
     }
 
+    public static ArrayList<Integer> getPathFromBellmondFord(BellmondFordResult result, int src, int destination){
+
+        int[] parent = result.parent;
+        
+        // Check if destination is reachable
+        if(result.dist[destination] == Long.MAX_VALUE/4) {
+            return new ArrayList<Integer>(); // Return empty path if unreachable
+        }
+
+        ArrayList<Integer> path = new ArrayList<Integer>();
+
+        findPath(parent, destination, src, path);
+        Collections.reverse(path);
+        return path;
+
+    }
+
+    public static void findPath(int[] parent, int curr, int src, ArrayList<Integer> path){
+
+        if(curr == -1) return; // Invalid path
+        
+        path.add(curr);
+        
+        if(curr == src) return; // Reached source, stop recursion
+        
+        findPath(parent, parent[curr], src, path);
+    }
+
 
 
 
