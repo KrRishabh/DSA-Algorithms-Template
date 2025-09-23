@@ -135,6 +135,24 @@ class DynamicProgramming{
          return ways[target]; 
     }
 
+        /*
+Alternative approach reminder:
+
+Classic DP:
+- Uses dp[s] = true/false (or count) to check if sum s can be formed.
+- Runs in O(n * target) time and O(target) space.
+- Great when target is small/moderate and all numbers are non-negative.
+
+Meet-in-the-Middle (MitM):
+- Split array into two halves (~n/2 each).
+- Enumerate all subset sums of each half (O(2^(n/2))).
+- Combine results using HashMap or sorting to check/count subsets reaching target.
+- Independent of target size and works with negative numbers.
+- Useful when n ≤ ~40 and target is very large (too big for dp array).
+
+=> Pick DP when target is small, MitM when target is huge or numbers may be negative.
+*/
+
     public boolean canMakeSum(int[] nums, int target) {
         // code for checking if it's possible to make a sum K from subsets in an array
         
@@ -155,6 +173,11 @@ class DynamicProgramming{
         return possible[target];
     }
 
+
+
+
+
+
     public int matrixChainMultiplication(int[] p){
         // You are given dimensions of matrices A1, A2, …, An. Matrix Ai has dimension p[i-1] x p[i]. 
         // Find the minimum cost of multiplying all matrices (the order of multiplication can change, but sequence cannot).
@@ -163,6 +186,7 @@ class DynamicProgramming{
         int len = p.length;
         int n = len-1;
         int[][] dp = new int[n][n];
+        // Let dp[i][j] = min cost of multiplying matrices i…j.
 
         for(int len=2; len<=n; len++){
             for(int i=0; i+len-1<n; i++){
