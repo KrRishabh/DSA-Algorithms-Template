@@ -173,6 +173,43 @@ public class Graph{
 
     }
 
+    public static void floydWarshall(int[][] graph){
+
+        int INF = Integer.MAX_VALUE;
+        int V = graph.length;
+        int[][] dist = new int[V][V];
+
+        for(int i=0; i<V; i++){
+            for(int j=0; j<V; j++){
+                dist[i][j] = graph[i][j];
+            }
+        }
+
+        for(int k=0; k<V; k++){
+            for(int i=0; i<V; i++){
+                for(int j=0; j<V; j++){
+                    if(dist[i][k] != INF && dist[k][j] != INF){
+                        int newDist = dist[i][k]+dist[k][j];
+                        if(newDist< dist[i][j]){
+                            dist[i][j] = newDist;
+                        }
+                    }
+                }
+            }
+        }
+
+        //detect negative cycle
+        for(int i=0; i<V; i++){
+            if(dist[i][i] < 0){
+                System.out.println("Negative cycle found");
+            }
+        }
+
+        return dist;
+
+
+    }
+
 
     
 }
